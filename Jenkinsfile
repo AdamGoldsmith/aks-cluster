@@ -38,7 +38,7 @@ pipeline {
 
         // use code analysis for syntax validataion
         // offload this to molecule testing at later date
-        stage('ansible lint code analysis') {
+/*        stage('ansible lint code analysis') {
             steps {
                 sh '''
                     for pb in $(find ${WORKSPACE}/playbooks -type f -name "*.yml")
@@ -48,6 +48,7 @@ pipeline {
                 '''
             }
         }
+*/
 
         // create Azure RG & AKS cluster
         stage('create cluster')  {
