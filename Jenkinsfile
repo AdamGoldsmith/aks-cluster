@@ -14,7 +14,7 @@ pipeline {
     parameters {
 
         string(name: 'input_name',
-            defaultValue: 'jenkins',
+            defaultValue: '',
             description: 'Azure resource & cluster names')
 
     }
@@ -60,6 +60,11 @@ pipeline {
 
         // create Azure RG & AKS cluster
         stage('create cluster')  {
+            when {
+                expression {
+                    input_name != ""
+                }
+            }
             steps {
                 wrap([$class: 'AnsiColorBuildWrapper', colorMapName: "xterm"]) {
                     sh 'ansible-playbook ${WORKSPACE}/playbooks/aks-cluster.yml \
