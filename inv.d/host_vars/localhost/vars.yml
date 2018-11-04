@@ -1,8 +1,4 @@
 ---
-pip_packages:
-  - "packaging"
-  - "msrestazure"
-  - "ansible[azure]"
 input_name: "{{ lookup('env', 'input_name') | default('demo', True) }}"
 resource_group: "RG-{{ input_name }}"
 location: "westeurope"

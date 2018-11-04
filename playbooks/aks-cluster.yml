@@ -11,10 +11,6 @@
     AZURE_TENANT: "{{ lookup('env', 'AZURE_TENANT') }}"
 
   tasks:
-    - name: "Install pre-requisites"
-      pip:
-        name: "{{ pip_packages }}"
-
     - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} resource group {{ resource_group }}"
       azure_rm_resourcegroup:
         auth_source: "env"
