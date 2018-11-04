@@ -45,8 +45,8 @@
           admin_username: "{{ username }}"
           ssh_key: "{{ ssh_key }}"
         service_principal:
-          client_id: "{{ client_id }}"
-          client_secret: "{{ client_secret }}"
+          client_id: "{{ lookup('env', 'AZURE_CLIENT_ID') }}"
+          client_secret: "{{ lookup('env', 'AZURE_SECRET') }}"
         agent_pool_profiles:
           - name: "default"
             count: "{{ vm_count }}"
