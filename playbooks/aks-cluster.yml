@@ -10,9 +10,6 @@
     AZURE_SECRET: "{{ lookup('env', 'az_secret') }}"
     AZURE_TENANT: "{{ lookup('env', 'az_tenant') }}"
 
-  vars:
-    input_name: "{{ lookup('env', 'input_name') | default('demo') }}"
-
   tasks:
     - name: "Install pre-requisites"
       pip:
