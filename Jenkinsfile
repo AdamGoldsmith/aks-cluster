@@ -11,6 +11,14 @@ pipeline {
         AZURE_TENANT = credentials('az_tenant')
     }
 
+    parameters {
+
+        string(name: 'input_name',
+            defaultValue: 'jenkins',
+            description: 'Azure resource & cluster names')
+
+    }
+
     stages {
 
         // clean out the existing workspace
@@ -55,7 +63,7 @@ pipeline {
             steps {
                 wrap([$class: 'AnsiColorBuildWrapper', colorMapName: "xterm"]) {
                     sh 'ansible-playbook ${WORKSPACE}/playbooks/aks-cluster.yml \
-                                         --extra-vars "input_name=jenkins" \
+                                         --extra-vars "input_name=${input_name}" \
                                     || echo "Errors encountered during playbook execution"'
                 }
             }
