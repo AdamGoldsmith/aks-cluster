@@ -16,6 +16,13 @@ Requirements
 * Azure subscription
 * ansible[azure]
 
+Store the following information in Jenkins credentials
+
+* az_subscription_id
+* az_client_id
+* az_secret
+* az_tenant
+
 Variables
 ---------
 
