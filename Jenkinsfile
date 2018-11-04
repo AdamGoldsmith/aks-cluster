@@ -30,11 +30,9 @@ pipeline {
         // display some variables
         stage ('debug vars') {
             steps {
-                wrap([$class: 'BuildUser']) {
-                    sh '''
-                        env > ${WORKSPACE}/files/env.txt
-                    '''
-                }
+                sh '''
+                    env > ${WORKSPACE}/files/env.txt
+                '''
             }
         }
 
