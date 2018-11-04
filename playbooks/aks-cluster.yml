@@ -21,14 +21,6 @@
         tags:
           Environment: "AKS-Demo"
 
-    - name: "Debug creds"
-      debug:
-       var: item
-      with_items:
-        - "{{ client_id }}"
-        - "{{ client_secret }}"
-        - "{{ username }}"
-
     - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} managed AKS cluster {{ aks_name }}"
       azure_rm_aks:
         profile: "default"
