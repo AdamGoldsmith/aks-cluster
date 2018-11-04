@@ -42,5 +42,10 @@
         state: "present"
         tags:
           Environment: "AKS-Demo"
+      register: aks
       when: state | default('present') == 'present'
+
+    - name: "Show output of AKS results"
+      debug:
+        var: aks
 
