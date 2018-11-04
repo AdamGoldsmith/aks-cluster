@@ -4,6 +4,13 @@ pipeline {
 
     agent { label "master" }
 
+    options {
+        // timestamps
+        timestamps()
+        // abort if running for stupid long time
+        timeout(time: 3, unit: 'HOURS')
+    }
+    
     environment {
         AZURE_SUBSCRIPTION_ID = credentials('az_subscription_id')
         AZURE_CLIENT_ID = credentials('az_client_id')
