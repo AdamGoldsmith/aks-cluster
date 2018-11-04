@@ -5,10 +5,10 @@
   gather_facts: False
 
   environment:
-    AZURE_SUBSCRIPTION_ID: "{{ lookup('env', 'az_subscription_id') }}"
-    AZURE_CLIENT_ID: "{{ lookup('env', 'az_client_id') }}"
-    AZURE_SECRET: "{{ lookup('env', 'az_secret') }}"
-    AZURE_TENANT: "{{ lookup('env', 'az_tenant') }}"
+    AZURE_SUBSCRIPTION_ID: "{{ lookup('env', 'AZURE_SUBSCRIPTION_ID') }}"
+    AZURE_CLIENT_ID: "{{ lookup('env', 'AZURE_CLIENT_ID') }}"
+    AZURE_SECRET: "{{ lookup('env', 'AZURE_SECRET') }}"
+    AZURE_TENANT: "{{ lookup('env', 'AZURE_TENANT') }}"
 
   tasks:
     - name: "Install pre-requisites"
