@@ -17,7 +17,7 @@
 
     - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} resource group {{ resource_group }}"
       azure_rm_resourcegroup:
-#        auth_source: "credential_file"
+        auth_source: "env"
         name: "{{ resource_group }}"
         location: "{{ location }}"
         state: "{{ state | default('present') }}"
@@ -36,7 +36,7 @@
     - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} managed AKS cluster {{ aks_name }}"
       azure_rm_aks:
         profile: "default"
-#        auth_source: "credential_file"
+        auth_source: "env"
         name: "{{ aks_name }}"
         location: "{{ location }}"
         resource_group: "{{ resource_group }}"

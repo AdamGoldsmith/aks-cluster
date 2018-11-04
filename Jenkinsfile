@@ -54,6 +54,7 @@ pipeline {
             steps {
                 wrap([$class: 'AnsiColorBuildWrapper', colorMapName: "xterm"]) {
                     sh 'ansible-playbook ${WORKSPACE}/playbooks/aks-cluster.yml \
+                                         --extra-vars "input_name=jenkins" \
                                     || echo "Errors encountered during playbook execution"'
                 }
             }
