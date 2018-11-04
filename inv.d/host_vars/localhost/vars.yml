@@ -1,0 +1,16 @@
+---
+pip_packages:
+  - "packaging"
+  - "msrestazure"
+  - "ansible[azure]"
+input_name: "{{ lookup('env', 'input_name') }}"
+resource_group: "RG-{{ input_name }}"
+location: "westeurope"
+aks_name: "AKS-cluster-{{ input_name }}"
+username: "aks-admin"
+ssh_key: "{{ lookup('file', lookup('env', 'WORKSPACE')+'/files/aks_id.pub') }}"
+client_id: "{{ lookup('env', 'AZURE_CLIENT_ID') }}"
+client_secret: "{{ lookup('env', 'AZURE_SECRET') }}"
+vm_count: 1
+vm_size: "Standard_A1_v2"
+

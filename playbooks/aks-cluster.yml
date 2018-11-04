@@ -1,0 +1,61 @@
+---
+- name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} Azure RG & AKS cluster"
+  hosts: localhost
+  connection: local
+  gather_facts: False
+
+  environment:
+    AZURE_SUBSCRIPTION_ID: "{{ lookup('env', 'az_subscription_id') }}"
+    AZURE_CLIENT_ID: "{{ lookup('env', 'az_client_id') }}"
+    AZURE_SECRET: "{{ lookup('env', 'az_secret') }}"
+    AZURE_TENANT: "{{ lookup('env', 'az_tenant') }}"
+
+  vars:
+    input_name: "{{ lookup('env', 'input_name') | default('demo') }}"
+
+  tasks:
+    - name: "Install pre-requisites"
+      pip:
+        name: "{{ pip_packages }}"
+
+    - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} resource group {{ resource_group }}"
+      azure_rm_resourcegroup:
+#        auth_source: "credential_file"
+        name: "{{ resource_group }}"
+        location: "{{ location }}"
+        state: "{{ state | default('present') }}"
+        force: True
+        tags:
+          Environment: "AKS-Demo"
+
+    - name: "Debug creds"
+      debug:
+       var: item
+      with_items:
+        - "{{ client_id }}"
+        - "{{ client_secret }}"
+        - "{{ username }}"
+
+    - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} managed AKS cluster {{ aks_name }}"
+      azure_rm_aks:
+        profile: "default"
+#        auth_source: "credential_file"
+        name: "{{ aks_name }}"
+        location: "{{ location }}"
+        resource_group: "{{ resource_group }}"
+        dns_prefix: "{{ aks_name }}"
+        linux_profile:
+          admin_username: "{{ username }}"
+          ssh_key: "{{ ssh_key }}"
+        service_principal:
+          client_id: "{{ client_id }}"
+          client_secret: "{{ client_secret }}"
+        agent_pool_profiles:
+          - name: "default"
+            count: "{{ vm_count }}"
+            vm_size: "{{ vm_size }}"
+        state: "present"
+        tags:
+          Environment: "AKS-Demo"
+      when: state | default('present') == 'present'
+
