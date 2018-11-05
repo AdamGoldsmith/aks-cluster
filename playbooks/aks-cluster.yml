@@ -69,7 +69,7 @@
       register: stat
 
     - name: "Debug azure-vote.yml location"
-      stat:
+      debug:
         var: stat
 #        msg: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
 
