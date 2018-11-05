@@ -73,7 +73,11 @@
         var: stat
 #        msg: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
 
+    - name: "Set file location fact"
+      set_fact:
+        app_file: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
+
     - name: "Run the app"
       command:
-        "kubectl apply -f {{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
+        "kubectl apply -f {{ app_file }}"
       register: az_runapp
