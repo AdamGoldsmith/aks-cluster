@@ -31,7 +31,7 @@
     - name: "Install azure-cli"
       yum:
         name: "azure-cli"
-        state: "{{ state | default('present') == 'absent') | ternary('absent', 'latest') }}"
+        state: "{{ (state | default('present') == 'absent') | ternary('absent', 'latest') }}"
       become: True
 
     - name: "Install kubectl"
