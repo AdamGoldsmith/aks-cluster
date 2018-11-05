@@ -14,7 +14,7 @@
     - name: "Import RPM GPG key"
       rpm_key:
         key: "https://packages.microsoft.com/keys/microsoft.asc"
-        state: "{{ (state | default('present') }}"
+        state: "{{ state | default('present') }}"
       become: True
 
     - name: "Add azure-cli repository"
@@ -25,13 +25,13 @@
         baseurl: "https://packages.microsoft.com/yumrepos/azure-cli"
         gpgcheck: True
         gpgkey: "https://packages.microsoft.com/keys/microsoft.asc"
-        state: "{{ (state | default('present') }}"
+        state: "{{ state | default('present') }}"
       become: True
     
     - name: "Install azure-cli"
       yum:
         name: "azure-cli"
-        state: "{{ (state | default('present') == 'absent') | ternary('absent', 'latest') }}"
+        state: "{{ state | default('present') == 'absent') | ternary('absent', 'latest') }}"
       become: True
 
     - name: "Install kubectl"
