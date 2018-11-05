@@ -39,36 +39,40 @@
         "az aks install-cli"
       become: True
 
-    - name: "Login to Azure"
-      command:
-        "az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}"
-      register: az_login
+#    - name: "Login to Azure"
+#      command:
+#        "az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}"
+#      register: az_login
     
-    - name: "Debug login"
-      debug:
-        var: az_login
+#    - name: "Debug login"
+#      debug:
+#        var: az_login
 
     - name: "Create resource group {{ resource_group }}"
-      command:
-        "az group create --name {{ resource_group }} --location {{ location }}"
+      shell: |
+        az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}
+        az group create --name {{ resource_group }} --location {{ location }}
       register: az_rg
       when: state | default('present') == 'present'
 
     - name: "Create managed AKS cluster {{ aks_name }}"
-      command:
-        "az aks create --resource-group {{ resource_group }} --name {{ aks_name }} --node-count {{ vm_count }} --enable-addons monitoring --generate-ssh-keys"
+      shell: |
+        az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}
+        az aks create --resource-group {{ resource_group }} --name {{ aks_name }} --node-count {{ vm_count }} --enable-addons monitoring --generate-ssh-keys
       register: az_cluster
       when: state | default('present') == 'present'
 
     - name: "Set credentials using Azure-CLI"
-      command:
-         "az aks get-credentials --resource-group {{ resource_group }} --name {{ aks_name }}"
+      shell: |
+        az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}
+        az aks get-credentials --resource-group {{ resource_group }} --name {{ aks_name }}
       register: az_creds
       when: state | default('present') == 'present'
 
     - name: "Destroy the resource group {{ resource_group }} & cluster {{ aks_name }}"
-      command:
-        "az group delete --name {{ aks_name }} --yes --no-wait"
+      shell: |
+        az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}
+        az group delete --name {{ aks_name }} --yes --no-wait
       when: state | default('present') == 'absent'
 
 #    - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} resource group {{ resource_group }}"
