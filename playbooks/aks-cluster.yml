@@ -64,7 +64,7 @@
 
     - name: "Destroy the resource group {{ resource_group }} & cluster {{ aks_name }}"
       command:
-        "az group delete --name {{ aks_name }} --yes --no-wait
+        "az group delete --name {{ aks_name }} --yes --no-wait"
       when: state | default('present') == 'absent'
 
 #    - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} resource group {{ resource_group }}"
