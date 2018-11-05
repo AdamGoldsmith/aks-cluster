@@ -12,7 +12,7 @@
 
   tasks:
     - name: "Import RPM GPG key"
-    - rpm_key:
+      rpm_key:
         key: "https://packages.microsoft.com/keys/microsoft.asc"
         state: "{{ (state | default('present') }}"
       become: True
