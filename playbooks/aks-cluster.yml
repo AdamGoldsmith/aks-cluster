@@ -63,9 +63,15 @@
       debug:
         var: az_creds
 
+    - name: "Stat the file"
+      stat:
+        path: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
+      register: stat
+
     - name: "Debug azure-vote.yml location"
-      debug:
-        msg: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
+      stat:
+        var: stat
+#        msg: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
 
     - name: "Run the app"
       command:
