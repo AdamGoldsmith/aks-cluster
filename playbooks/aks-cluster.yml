@@ -63,6 +63,10 @@
       debug:
         var: az_creds
 
+    - name: "Debug azure-vote.yml location"
+      debug:
+        msg: "{{ lookup('file', lookup('env', 'WORKSPACE')+'/files/azure-vote.yml') }}"
+
     - name: "Run the app"
       command:
         "kubectl apply -f {{ lookup('file', lookup('env', 'WORKSPACE')+'/files/azure-vote.yml') }}"
