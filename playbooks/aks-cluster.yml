@@ -19,7 +19,7 @@
 
     - name: "Add azure-cli repository"
       yum_repository:
-        name: "Azure CLI"
+        name: "azure-cli"
         description: "Azure CLI repo"
         file: "/etc/yum.repos.d/azure-cli"
         baseurl: "https://packages.microsoft.com/yumrepos/azure-cli"
