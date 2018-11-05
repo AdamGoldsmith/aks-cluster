@@ -56,7 +56,7 @@
 
     - name: "Download credentials"
       command:
-        "/usr/bin/az aks get-credentials --resource-group {{ resource_group }} --name {{ aks_name }}"
+        "/usr/bin/az aks get-credentials --resource-group {{ resource_group }} --name {{ aks_name }} --file {{ lookup('env', 'WORKSPACE')+'/files/kube.config' }} --overwrite-existing"
       register: az_creds
 
     - name: "Show output of AKS results"
@@ -79,5 +79,5 @@
 
     - name: "Run the app"
       command:
-        "/usr/local/bin/kubectl apply -f {{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
+        "/usr/local/bin/kubectl --kubeconfig {{ lookup('env', 'WORKSPACE')+'/files/kube.config' }} apply -f {{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
       register: az_runapp
