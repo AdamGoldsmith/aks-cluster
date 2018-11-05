@@ -37,6 +37,7 @@
     - name: "Install kubectl"
       command:
         "az aks install-cli"
+      become: True
       
 #    - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} resource group {{ resource_group }}"
 #      azure_rm_resourcegroup:
