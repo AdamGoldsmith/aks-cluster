@@ -51,33 +51,33 @@
 
     - name: "Login to Azure"
       command:
-        "az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}"
+        "/usr/bin/az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}"
       register: az_login
 
     - name: "Download credentials"
       command:
-        "az aks get-credentials --resource-group {{ resource_group }} --name {{ aks_name }}"
+        "/usr/bin/az aks get-credentials --resource-group {{ resource_group }} --name {{ aks_name }}"
       register: az_creds
 
     - name: "Show output of AKS results"
       debug:
         var: az_creds
 
-    - name: "Stat the file"
-      stat:
-        path: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
-      register: stat
-
-    - name: "Debug azure-vote.yml location"
-      debug:
-        var: stat
-#        msg: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
-
-    - name: "Set file location fact"
-      set_fact:
-        app_file: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
+#    - name: "Stat the file"
+#      stat:
+#        path: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
+#      register: stat
+#
+#    - name: "Debug azure-vote.yml location"
+#      debug:
+#        var: stat
+##        msg: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
+#
+#    - name: "Set file location fact"
+#      set_fact:
+#        app_file: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
 
     - name: "Run the app"
       command:
-        "kubectl apply -f {{ app_file }}"
+        "/usr/local/bin/kubectl apply -f {{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
       register: az_runapp
