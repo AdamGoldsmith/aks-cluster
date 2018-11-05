@@ -65,5 +65,5 @@
 
         - name: "Run the app"
       command:
-        "kubectl apply -f {{ lookup('file', lookup('env', 'WORKSPACE')+'/files/azure-vote.yaml }}"
+        "kubectl apply -f {{ lookup('file', lookup('env', 'WORKSPACE')+'/files/azure-vote.yaml') }}"
       register: az_runapp
