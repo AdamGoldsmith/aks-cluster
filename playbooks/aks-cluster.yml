@@ -11,41 +11,73 @@
     AZURE_TENANT: "{{ lookup('env', 'AZURE_TENANT') }}"
 
   tasks:
-    - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} resource group {{ resource_group }}"
-      azure_rm_resourcegroup:
-        auth_source: "env"
-        name: "{{ resource_group }}"
-        location: "{{ location }}"
-        state: "{{ state | default('present') }}"
-        force: True
-        tags:
-          Environment: "AKS-Demo"
-
-    - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} managed AKS cluster {{ aks_name }}"
-      azure_rm_aks:
-        profile: "default"
-        auth_source: "env"
-        name: "{{ aks_name }}"
-        location: "{{ location }}"
-        resource_group: "{{ resource_group }}"
-        dns_prefix: "{{ aks_name }}"
-        linux_profile:
-          admin_username: "{{ username }}"
-          ssh_key: "{{ ssh_key }}"
-        service_principal:
-          client_id: "{{ lookup('env', 'AZURE_CLIENT_ID') }}"
-          client_secret: "{{ lookup('env', 'AZURE_SECRET') }}"
-        agent_pool_profiles:
-          - name: "default"
-            count: "{{ vm_count }}"
-            vm_size: "{{ vm_size }}"
+    - name: "Import RPM GPG key"
+    - rpm_key:
         state: "present"
-        tags:
-          Environment: "AKS-Demo"
-      register: aks
-      when: state | default('present') == 'present'
+        key: "https://packages.microsoft.com/keys/microsoft.asc"
+        state: "{{ (state | default('present') }}"
+      become: True
 
-    - name: "Show output of AKS results"
-      debug:
-        var: aks
+    - name: "Add azure-cli repository"
+      yum_repository:
+        name: "Azure CLI"
+        description: "Azure CLI repo"
+        file: "/etc/yum.repos.d/azure-cli.repo"
+        baseurl: "https://packages.microsoft.com/yumrepos/azure-cli"
+        gpgcheck: True
+        gpgkey: "https://packages.microsoft.com/keys/microsoft.asc"
+        state: "{{ (state | default('present') }}"
+      become: True
+    
+    - name: "Install azure-cli"
+      yum:
+        name: "azure-cli"
+        state: "{{ (state | default('present') == 'absent') | ternary('absent', 'latest') }}"
+      become: True
 
+    - name: "Install kubectl"
+      command:
+        "az aks install-cli"
+      
+#    - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} resource group {{ resource_group }}"
+#      azure_rm_resourcegroup:
+#        auth_source: "env"
+#        name: "{{ resource_group }}"
+#        location: "{{ location }}"
+#        state: "{{ state | default('present') }}"
+#        force: True
+#        tags:
+#          Environment: "AKS-Demo"
+#
+#    - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} managed AKS cluster {{ aks_name }}"
+#      azure_rm_aks:
+#        profile: "default"
+#        auth_source: "env"
+#        name: "{{ aks_name }}"
+#        location: "{{ location }}"
+#        resource_group: "{{ resource_group }}"
+#        dns_prefix: "{{ aks_name }}"
+#        linux_profile:
+#          admin_username: "{{ username }}"
+#          ssh_key: "{{ ssh_key }}"
+#        service_principal:
+#          client_id: "{{ lookup('env', 'AZURE_CLIENT_ID') }}"
+#          client_secret: "{{ lookup('env', 'AZURE_SECRET') }}"
+#        agent_pool_profiles:
+#          - name: "default"
+#            count: "{{ vm_count }}"
+#            vm_size: "{{ vm_size }}"
+#        state: "present"
+#        tags:
+#          Environment: "AKS-Demo"
+#      register: aks
+#      when: state | default('present') == 'present'
+#
+#    - name: "Show output of AKS results"
+#      debug:
+#        var: aks
+#
+#    - name: "Set credentials using Azure-CLI"
+#      command:
+#        "az aks get-credentials --resource-group {{ resource_group }} --name {{ aks_name }}"
+      
