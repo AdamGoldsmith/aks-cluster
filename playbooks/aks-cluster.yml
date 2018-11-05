@@ -43,6 +43,10 @@
       command:
         "az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}"
       register: az_login
+    
+    - name: "Debug login"
+      debug:
+        var: az_login
 
     - name: "Create resource group {{ resource_group }}"
       command:
