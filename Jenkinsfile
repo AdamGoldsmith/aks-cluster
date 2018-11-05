@@ -69,7 +69,7 @@ pipeline {
         stage('create cluster')  {
             when {
                 expression {
-                    input_name != ""
+                    input_name != null
                 }
             }
             steps {
