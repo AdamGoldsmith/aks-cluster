@@ -59,7 +59,11 @@
         "az aks get-credentials --resource-group {{ resource_group }} --name {{ aks_name }}"
       register: az_creds
 
-    - name: "Run the app"
+    - name: "Show output of AKS results"
+      debug:
+        var: az_creds
+
+        - name: "Run the app"
       command:
-        "kubectl apply -f ./files/azure-vote.yaml"
+        "kubectl apply -f {{ lookup('file', lookup('env', 'WORKSPACE')+'/files/azure-vote.yaml"
       register: az_runapp
