@@ -21,7 +21,7 @@
       yum_repository:
         name: "Azure CLI"
         description: "Azure CLI repo"
-        file: "/etc/yum.repos.d/azure-cli.repo"
+        file: "/etc/yum.repos.d/azure-cli"
         baseurl: "https://packages.microsoft.com/yumrepos/azure-cli"
         gpgcheck: True
         gpgkey: "https://packages.microsoft.com/keys/microsoft.asc"
