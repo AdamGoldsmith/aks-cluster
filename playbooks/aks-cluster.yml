@@ -108,12 +108,13 @@
           - entry: "{{ app_external_ip }}"
       ignore_errors: True
 
-    - name: "Wait 300 seconds for port 80 to become open"
-      wait_for:
-        host: "{{ app_external_ip }}"
-        port: 80
-        state: "present"
-        search_regex: "Azure Voting App"
-        delay: 10
-        timeout: 900
+    - name: "Wait for app start on port 80"
+      uri:
+        url: "http://{{ app_external_ip }}:80"
+        status_code: 200
+        return_content: True
+      register: result
+      until: result.content | regex_search('(Azure Voting App)')
+      retries: 60
+      delay: 10
 
