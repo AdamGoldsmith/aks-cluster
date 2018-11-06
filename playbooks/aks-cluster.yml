@@ -113,6 +113,6 @@
         host: "{{ app_external_ip }}"
         port: 80
         state: "present"
-        search_regex: "needs search regex"
+        search_regex: "Azure Voting App"
         delay: 10
 
