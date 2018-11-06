@@ -107,3 +107,12 @@
         records:
           - entry: "{{ app_external_ip }}"
       ignore_errors: True
+
+    - name: "Wait 300 seconds for port 80 to become open"
+      wait_for:
+        host: "{{ app_external_ip }}"
+        port: 80
+        state: "present"
+        search_regex: "needs search regex"
+        delay: 10
+
