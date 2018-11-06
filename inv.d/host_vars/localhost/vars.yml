@@ -1,7 +1,8 @@
 ---
 input_name: "{{ lookup('env', 'input_name') | default('demo', True) }}"
 resource_group: "RG-{{ input_name }}"
-location: "westeurope"
+#location: "westeurope"
+location: "uksouth"
 aks_name: "AKS-cluster-{{ input_name }}"
 username: "aks-admin"
 ssh_key: "{{ lookup('file', lookup('env', 'WORKSPACE')+'/files/aks_id.pub') }}"
