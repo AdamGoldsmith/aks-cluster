@@ -27,7 +27,18 @@ pipeline {
     }
 
     stages {
-
+        // check if this is the very first run
+        stage("initial run") { 
+            steps { 
+                script { 
+                    if ("${params.input_name}" == '') { 
+                        currentBuild.result = 'ABORTED' 
+                        return('DRY RUN COMPLETED. JOB PARAMETERIZED.') 
+                    } 
+                } 
+            } 
+        } 
+    
         // clean out the existing workspace
         stage ('clean workspace') {
             steps {
