@@ -8,6 +8,7 @@ ssh_key: "{{ lookup('file', lookup('env', 'WORKSPACE')+'/files/aks_id.pub') }}"
 client_id: "{{ lookup('env', 'AZURE_CLIENT_ID') }}"
 client_secret: "{{ lookup('env', 'AZURE_SECRET') }}"
 vm_count: 1
-vm_size: "Standard_A1_v2"
+#vm_size: "Standard_A1_v2"
+vm_size: "Standard_D1_v2"
 app_file: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
 kube_conf: "{{ lookup('env', 'WORKSPACE')+'/files/kube.config' }}"
