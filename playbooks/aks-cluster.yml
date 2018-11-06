@@ -50,13 +50,11 @@
 #        var: aks
 
     - name: "Login to Azure"
-      command:
-        "/usr/bin/az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}"
+      command: "/usr/bin/az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}"
       register: az_login
 
     - name: "Download credentials"
-      command:
-        "/usr/bin/az aks get-credentials --resource-group {{ resource_group }} --name {{ aks_name }} --file {{ lookup('env', 'WORKSPACE')+'/files/kube.config' }} --overwrite-existing"
+      command: "/usr/bin/az aks get-credentials --resource-group {{ resource_group }} --name {{ aks_name }} --file {{ kube_conf }} --overwrite-existing"
       register: az_creds
 
     - name: "Show output of AKS results"
@@ -73,11 +71,39 @@
 #        var: stat
 ##        msg: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
 #
-#    - name: "Set file location fact"
-#      set_fact:
-#        app_file: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
 
     - name: "Run the app"
-      command:
-        "/usr/local/bin/kubectl --kubeconfig {{ lookup('env', 'WORKSPACE')+'/files/kube.config' }} apply -f {{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
+      command: "/usr/local/bin/kubectl --kubeconfig {{ kube_conf }} apply -f {{ app_file }}"
       register: az_runapp
+
+    - debug: var=az_runapp
+ 
+    - name: "Wait for allocation of app ip"
+      command: "/usr/local/bin/kubectl --kubeconfig {{ kube_conf }} get service azure-vote-front"
+      register: kubectl_get_service
+      until: kubectl_get_service.stdout | regex_findall('\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b') | length == 2
+      retries: 30
+      delay: 5
+      ignore_errors: True
+ 
+    - name: "Debug kubectl_get_service"
+      debug:
+        var: kubectl_get_service
+ 
+    - name: set fact
+      set_fact:
+        app_external_ip: "{{ kubectl_get_service.stdout  | regex_findall('\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b') | last }}"
+ 
+    - debug: var=app_external_ip
+ 
+    - name: "Create app dns name"
+      azure_rm_dnsrecordset:
+        resource_group: "cloud-msp.net"
+        zone_name: "cloud-msp.net"
+        state: "present"
+        relative_name: "{{ input_name }}"
+        time_to_live: 300
+        record_type: "A"
+        records:
+          - entry: "{{ app_external_ip }}"
+      ignore_errors: True
