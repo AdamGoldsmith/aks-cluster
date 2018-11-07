@@ -16,7 +16,7 @@
         url: "{{ webhook }}"
         method: POST
         headers: "'accept'='application/json'"
-        body: '{"text": "{{ input_name }} : {{ lookup("pipe", "date") }} - START CLUSTER {{ (state | default('present') == 'present') | ternary('BUILD', 'DESTROY') }}"}'
+        body: '{"text": "{{ input_name }} : {{ lookup("pipe", "date") }} - START CLUSTER {{ (state | default("present") == "present") | ternary("BUILD", "DESTROY") }}"}'
         body_format: json
         status_code: 200
 
@@ -62,7 +62,7 @@
         url: "{{ webhook }}"
         method: POST
         headers: "'accept'='application/json'"
-        body: '{"text": "{{ input_name }} : {{ lookup("pipe", "date") }} - START APP {{ (state | default('present') == 'present') | ternary('BUILD', 'DESTROY') }}"}'
+        body: '{"text": "{{ input_name }} : {{ lookup("pipe", "date") }} - START APP {{ (state | default("present") == "present") | ternary("BUILD", "DESTROY") }}"}'
         body_format: json
         status_code: 200
 
@@ -140,7 +140,7 @@
         url: "{{ webhook }}"
         method: POST
         headers: "'accept'='application/json'"
-        body: '{"text": "{{ lookup("pipe", "date") }} : {{ input_name }} - FINISHED ALL {{ (state | default('present') == 'present') | ternary('BUILDS. Application ready at http://{{ input_name }}.cloud-msp.net', 'DESTROYS.') }}"}'
+        body: '{"text": "{{ lookup("pipe", "date") }} : {{ input_name }} - FINISHED ALL {{ (state | default("present") == "present") | ternary("BUILDS. Application ready at http://{{ input_name }}.cloud-msp.net", "DESTROYS.") }}"}'
         body_format: json
         status_code: 200
 
