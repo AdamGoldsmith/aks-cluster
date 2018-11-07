@@ -13,3 +13,4 @@ vm_count: 1
 vm_size: "Standard_D1_v2"
 app_file: "{{ lookup('env', 'WORKSPACE')+'/files/azure-vote.yml' }}"
 kube_conf: "{{ lookup('env', 'WORKSPACE')+'/files/kube.config' }}"
+webhook: "https://outlook.office.com/webhook/646fca5d-346e-49d7-bed7-a44e224f9778@e0793d39-0939-496d-b129-198edd916feb/IncomingWebhook/8fda581e027242f28354bd3721a42b3e/149b01b3-7a9d-41a8-9513-ceb0af2a4eae"
