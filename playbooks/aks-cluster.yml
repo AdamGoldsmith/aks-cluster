@@ -141,7 +141,7 @@
         url: "{{ webhook }}"
         method: POST
         headers: "'accept'='application/json'"
-        body: '{"text": "{{ lookup("pipe", "date") }} : {{ input_name }} - FINISHED BUILD"}'
+        body: '{"text": "{{ lookup("pipe", "date") }} : {{ input_name }} - FINISHED ALL BUILDS. Application ready at http://{{ input_name }}.cloud-msp.net"}'
         body_format: json
         status_code: 200
 
