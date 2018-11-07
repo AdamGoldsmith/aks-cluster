@@ -29,7 +29,7 @@ pipeline {
     stages {
         // check if this is the very first run, if it is then
         // abort the pipeline as it will know nothing about parameters
-        stage("initial run") {
+/*        stage("initial run") {
             when {
                 expression {
                     params.input_name == ''
@@ -42,7 +42,7 @@ pipeline {
                 }
             }
         }
-
+*/
 /*
                 script { 
                     if ("${params.input_name}" == '') { 
@@ -78,10 +78,10 @@ pipeline {
         }
 
          // create Azure RG & AKS cluster
-/*        stage('create cluster')  {
+        stage('create cluster')  {
             when {
                 expression {
-                    params.input_name != null
+                    params.input_name != ''
                 }
             }
             steps {
@@ -92,7 +92,6 @@ pipeline {
                 }
             }
         }
-*/
 
         // clean out the current workspace
 /*        stage ('clean workspace') {
