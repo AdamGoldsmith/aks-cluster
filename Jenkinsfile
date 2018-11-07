@@ -29,20 +29,17 @@ pipeline {
     stages {
         // check if this is the very first run, if it is then
         // abort the pipeline as it will know nothing about parameters
-/*        stage("initial run") {
+        stage("initial run") {
             when {
                 expression {
                     params.input_name == ''
                 }
             }
             steps {
-                script {
-                    currentBuild.result = 'ABORTED'
-                    error('INITIAL RUN COMPLETED, JOB PARAMETERIZED')
-                }
+                echo 'INITIAL RUN COMPLETED. JOB PARAMETERIZED.'
             }
         }
-*/
+
 /*
                 script { 
                     if ("${params.input_name}" == '') { 
