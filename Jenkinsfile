@@ -36,8 +36,7 @@ pipeline {
                 }
             }
             steps {
-                echo 'INITIAL RUN COMPLETED, JOB PARAMETERIZED'
-                return
+                error('INITIAL RUN COMPLETED, JOB PARAMETERIZED')
             }
         }
 
