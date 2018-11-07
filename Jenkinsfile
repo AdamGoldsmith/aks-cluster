@@ -26,17 +26,10 @@ pipeline {
 
     }
 
-    // check if this is the very first run, if it is then
-    // abort the pipeline as it will know nothing about parameters
-    when {
-        expression {
-            params.input_name != ''
-        }
-    }
     stages {
         // check if this is the very first run, if it is then
         // abort the pipeline as it will know nothing about parameters
-/*        stage("initial run") {
+        stage("initial run") {
             when {
                 expression {
                     params.input_name == ''
@@ -47,7 +40,7 @@ pipeline {
                 error('INITIAL RUN COMPLETED, JOB PARAMETERIZED')
             }
         }
-*/
+
 /*
                 script { 
                     if ("${params.input_name}" == '') { 
