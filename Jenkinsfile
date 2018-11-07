@@ -29,8 +29,19 @@ pipeline {
     stages {
         // check if this is the very first run, if it is then
         // abort the pipeline as it will know nothing about parameters
-        stage("initial run") { 
-            steps { 
+        stage("initial run") {
+            when {
+                expression {
+                    params.input_name == ''
+                }
+            }
+            steps {
+                echo 'INITIAL RUN COMPLETED, JOB PARAMETERIZED'
+                return
+            }
+        }
+
+/*
                 script { 
                     if ("${params.input_name}" == '') { 
                         currentBuild.result = 'ABORTED' 
@@ -39,6 +50,7 @@ pipeline {
                 } 
             } 
         } 
+*/
     
         // clean out the existing workspace
         stage ('clean workspace') {
