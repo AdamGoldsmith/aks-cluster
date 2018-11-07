@@ -36,7 +36,9 @@ pipeline {
                 }
             }
             steps {
-                currentBuild.result = 'SUCCESS'
+                script {
+                    currentBuild.result = 'SUCCESS'
+                }
                 error('INITIAL RUN COMPLETED, JOB PARAMETERIZED')
             }
         }
