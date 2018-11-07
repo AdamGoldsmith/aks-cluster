@@ -38,8 +38,8 @@ pipeline {
             steps {
                 script {
                     currentBuild.result = 'SUCCESS'
+                    error('INITIAL RUN COMPLETED, JOB PARAMETERIZED')
                 }
-                error('INITIAL RUN COMPLETED, JOB PARAMETERIZED')
             }
         }
 
