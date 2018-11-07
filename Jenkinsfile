@@ -28,10 +28,16 @@ pipeline {
 
     stages {
 
-        // clean out the existing workspace
-        stage ('clean workspace') {
+        // check if this is the very first run, if it is then
+        // abort the pipeline as it will know nothing about parameters
+        stage("initial run") {
+            when {
+                expression {
+                    params.input_name == ''
+                }
+            }
             steps {
-                step([$class: 'WsCleanup'])
+                echo 'INITIAL RUN COMPLETED. JOB PARAMETERIZED.'
             }
         }
 
@@ -69,7 +75,7 @@ pipeline {
         stage('create cluster')  {
             when {
                 expression {
-                    params.input_name != null
+                    params.input_name != ''
                 }
             }
             steps {
