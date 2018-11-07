@@ -98,4 +98,11 @@ pipeline {
         }
 */
     }
+
+    post { 
+        always { 
+            // office365ConnectorSend message: "Build finished from: ${env.BRANCH_NAME} : ${currentBuild.durationString}", status:"${currentBuild.currentResult}", webhookUrl: "https://outlook.office.com/webhook/646fca5d-346e-49d7-bed7-a44e224f9778@e0793d39-0939-496d-b129-198edd916feb/IncomingWebhook/8fda581e027242f28354bd3721a42b3e/149b01b3-7a9d-41a8-9513-ceb0af2a4eae"
+            echo "Build finished from: ${env.BRANCH_NAME} (${currentBuild.durationString}), status: ${currentBuild.currentResult}, webhookUrl: https://outlook.office.com/webhook/646fca5d-346e-49d7-bed7-a44e224f9778@e0793d39-0939-496d-b129-198edd916feb/IncomingWebhook/8fda581e027242f28354bd3721a42b3e/149b01b3-7a9d-41a8-9513-ceb0af2a4eae"
+        }
+    }
 }
