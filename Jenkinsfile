@@ -36,6 +36,7 @@ pipeline {
                 }
             }
             steps {
+                currentBuild.result = 'ABORTED'
                 error('INITIAL RUN COMPLETED, JOB PARAMETERIZED')
             }
         }
