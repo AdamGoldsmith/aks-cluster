@@ -75,7 +75,7 @@ pipeline {
         }
 
          // create Azure RG & AKS cluster
-        stage('create cluster')  {
+/*        stage('create cluster')  {
             when {
                 expression {
                     params.input_name != ''
@@ -89,7 +89,7 @@ pipeline {
                 }
             }
         }
-
+*/
         // clean out the current workspace
 /*        stage ('clean workspace') {
             steps {
