@@ -11,6 +11,15 @@
     AZURE_TENANT: "{{ lookup('env', 'AZURE_TENANT') }}"
 
   tasks:
+    - name: "MS Teams - Starting cluster build"
+      uri:
+        url: "{{ webhook }}"
+        method: POST
+        headers: "'accept'='application/json'"
+        body: '{"text": "{{ input_name }} : {{ lookup("pipe", "date") }} - START CLUSTER BUILD"}'
+        body_format: json
+        status_code: 200
+        
     - name: "{{ (state | default('present') == 'present') | ternary('create', 'destroy') }} resource group {{ resource_group }}"
       azure_rm_resourcegroup:
         auth_source: "env"
@@ -48,6 +57,15 @@
 #    - name: "Show output of AKS results"
 #      debug:
 #        var: aks
+
+    - name: "MS Teams - Starting application build"
+      uri:
+        url: "{{ webhook }}"
+        method: POST
+        headers: "'accept'='application/json'"
+        body: '{"text": "{{ input_name }} : {{ lookup("pipe", "date") }} - START APP BUILD"}'
+        body_format: json
+        status_code: 200
 
     - name: "Login to Azure"
       command: "/usr/bin/az login --service-principal -u {{ lookup('env', 'AZURE_CLIENT_ID') }} -p {{ lookup('env', 'AZURE_SECRET') }} --tenant {{ lookup('env', 'AZURE_TENANT') }}"
@@ -117,4 +135,13 @@
       until: result.content | regex_search('(Azure Voting App)')
       retries: 60
       delay: 10
+
+    - name: "MS Teams - Finished build"
+      uri:
+        url: "{{ webhook }}"
+        method: POST
+        headers: "'accept'='application/json'"
+        body: '{"text": "{{ input_name }} : {{ lookup("pipe", "date") }} - FINISHED BUILD"}'
+        body_format: json
+        status_code: 200
 
