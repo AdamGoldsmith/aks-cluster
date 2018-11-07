@@ -27,13 +27,14 @@ pipeline {
     }
 
     stages {
-        // check if this is the very first run
+        // check if this is the very first run, if it is then
+        // abort the pipeline as it will know nothing about parameters
         stage("initial run") { 
             steps { 
                 script { 
                     if ("${params.input_name}" == '') { 
                         currentBuild.result = 'ABORTED' 
-                        return('DRY RUN COMPLETED. JOB PARAMETERIZED.') 
+                        error('DRY RUN COMPLETED. JOB PARAMETERIZED.') 
                     } 
                 } 
             } 
@@ -62,22 +63,8 @@ pipeline {
             }
         }
 
-        // use code analysis for syntax validataion
-        // offload this to molecule testing at later date
-/*        stage('ansible lint code analysis') {
-            steps {
-                sh '''
-                    for pb in $(find ${WORKSPACE}/playbooks -type f -name "*.yml")
-                    do
-                        ansible-lint ${pb}
-                    done
-                '''
-            }
-        }
-*/
-
-        // create Azure RG & AKS cluster
-        stage('create cluster')  {
+         // create Azure RG & AKS cluster
+/*        stage('create cluster')  {
             when {
                 expression {
                     params.input_name != null
@@ -91,6 +78,7 @@ pipeline {
                 }
             }
         }
+*/
 
         // clean out the current workspace
 /*        stage ('clean workspace') {
